@@ -33,6 +33,7 @@ export default class HomeScreen extends React.Component {
    * Registers user on the server and returns user info
    */
   registerUser = () => {
+    //TODO: Update this with the registration user
     this.setState({
       isLoading: true
     });

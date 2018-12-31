@@ -17,8 +17,10 @@ export default class HomeScreen extends React.Component {
    * Gets device id
    */
   getDeviceID = () => {
-    const deviceId = DeviceInfo.getDeviceId();
-    alert(deviceId)
+    const deviceId = DeviceInfo.getUniqueID();
+    this.setState({
+      deviceId
+    })
   }
   
   static navigationOptions = {

@@ -20,7 +20,16 @@ export default class HomeScreen extends React.Component {
     const deviceId = DeviceInfo.getUniqueID();
     this.setState({
       deviceId
-    })
+    }, () => this.registerUser())
+  }
+  
+  /**
+   * registerUser
+   *
+   * Registers user on the server and returns user info
+   */
+  registerUser = () => {
+  
   }
   
   static navigationOptions = {

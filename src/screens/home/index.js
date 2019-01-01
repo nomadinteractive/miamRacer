@@ -68,34 +68,19 @@ export default class HomeScreen extends React.Component {
           </Text>
           <Text
             onPress={() => this.props.navigation.navigate("Game")}
-            style={{
-              fontSize: 40,
-              textAlign: "center",
-              textDecorationLine: "underline",
-              paddingBottom: 30
-            }}
+            style={Styles.playButton}
           >
             play
           </Text>
           <Text
             onPress={() => this.props.navigation.navigate("Game")}
-            style={{
-              fontSize: 12,
-              textAlign: "center",
-              textDecorationLine: "underline",
-              paddingBottom: 10
-            }}
+            style={Styles.secundaryButton}
           >
             play with friends
           </Text>
           <Text
             onPress={() => this.props.navigation.navigate("Game")}
-            style={{
-              fontSize: 12,
-              textAlign: "center",
-              textDecorationLine: "underline",
-              paddingBottom: 20
-            }}
+            style={Styles.secundaryButton}
           >
             solo practice
           </Text>

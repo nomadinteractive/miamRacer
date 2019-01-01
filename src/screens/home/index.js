@@ -58,7 +58,12 @@ export default class HomeScreen extends React.Component {
   render() {
     let content;
     if (this.state.isLoading) {
-      content = <ActivityIndicator size="large" />;
+      content = (
+        <View>
+          <ActivityIndicator size="large" style={{ paddingBottom: 20 }} />
+          <Text>Creating User...</Text>
+        </View>
+      );
     } else {
       content = (
         <View>

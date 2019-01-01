@@ -1,9 +1,9 @@
 import React from "react";
 import Styles from "./style";
-import SInfo from "react-native-sensitive-info";
 import { View, Text, Button, ActivityIndicator } from "react-native";
 import DeviceInfo from "react-native-device-info";
 import API from "../../api";
+import Storage from "../../misc/storage";
 
 export default class HomeScreen extends React.Component {
   static navigationOptions = {
@@ -17,7 +17,7 @@ export default class HomeScreen extends React.Component {
   };
 
   componentDidMount() {
-    SInfo.getItem("RegisteredUser", {}).then(user => {
+    Storage.get(Storage.Keys.User).then(user => {
       if (user) {
         this.setState({
           user,
@@ -26,8 +26,6 @@ export default class HomeScreen extends React.Component {
       } else {
         this.getDeviceID();
       }
-
-      console.log(value); //value2
     });
   }
 

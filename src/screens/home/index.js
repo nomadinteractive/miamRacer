@@ -2,12 +2,18 @@ import React from "react";
 import Styles from "./style";
 import { View, Text, Button, ActivityIndicator } from "react-native";
 import DeviceInfo from "react-native-device-info";
+import API from "../../api";
 
 export default class HomeScreen extends React.Component {
+  static navigationOptions = {
+    header: null
+  };
+
   state = {
     isLoading: true,
     deviceId: ""
   };
+
   componentDidMount() {
     this.getDeviceID();
   }
@@ -33,25 +39,31 @@ export default class HomeScreen extends React.Component {
    * Registers user on the server and returns user info
    */
   registerUser = () => {
-    //TODO: Update this with the registration user
-    this.setState({
-      isLoading: true
-    });
-    setTimeout(() => {
-      this.setState({
-        isLoading: false
+    //TODO: Update this with the real registration user Endpoint
+    API.shared
+      .registerUser(this.state.deviceId)
+      .then(response => {
+        console.log(response);
+      })
+      .catch(error => {
+        console.log(error);
+      })
+      .finally(() => {
+        this.setState({
+          isLoading: false
+        });
       });
-    }, 2500);
-  };
-
-  static navigationOptions = {
-    header: null
   };
 
   render() {
     let content;
     if (this.state.isLoading) {
-      content = <ActivityIndicator size="large" />;
+      content = (
+        <View>
+          <ActivityIndicator size="large" style={{ paddingBottom: 20 }} />
+          <Text>Creating User...</Text>
+        </View>
+      );
     } else {
       content = (
         <View>
@@ -61,34 +73,19 @@ export default class HomeScreen extends React.Component {
           </Text>
           <Text
             onPress={() => this.props.navigation.navigate("Game")}
-            style={{
-              fontSize: 40,
-              textAlign: "center",
-              textDecorationLine: "underline",
-              paddingBottom: 30
-            }}
+            style={Styles.playButton}
           >
             play
           </Text>
           <Text
             onPress={() => this.props.navigation.navigate("Game")}
-            style={{
-              fontSize: 12,
-              textAlign: "center",
-              textDecorationLine: "underline",
-              paddingBottom: 10
-            }}
+            style={Styles.secundaryButton}
           >
             play with friends
           </Text>
           <Text
             onPress={() => this.props.navigation.navigate("Game")}
-            style={{
-              fontSize: 12,
-              textAlign: "center",
-              textDecorationLine: "underline",
-              paddingBottom: 20
-            }}
+            style={Styles.secundaryButton}
           >
             solo practice
           </Text>

@@ -1,5 +1,6 @@
 import React from "react";
 import Styles from "./style";
+import SInfo from "react-native-sensitive-info";
 import { View, Text, Button, ActivityIndicator } from "react-native";
 import DeviceInfo from "react-native-device-info";
 import API from "../../api";
@@ -11,11 +12,23 @@ export default class HomeScreen extends React.Component {
 
   state = {
     isLoading: true,
-    deviceId: ""
+    deviceId: "",
+    user: null
   };
 
   componentDidMount() {
-    this.getDeviceID();
+    SInfo.getItem("RegisteredUser", {}).then(user => {
+      if (user) {
+        this.setState({
+          user,
+          isLoading: false
+        });
+      } else {
+        this.getDeviceID();
+      }
+
+      console.log(value); //value2
+    });
   }
 
   /**
@@ -44,6 +57,9 @@ export default class HomeScreen extends React.Component {
       .registerUser(this.state.deviceId)
       .then(response => {
         console.log(response);
+        this.setState({
+          user: { userName: "black-falcon20" }
+        });
       })
       .catch(error => {
         console.log(error);
@@ -68,8 +84,10 @@ export default class HomeScreen extends React.Component {
       content = (
         <View>
           <Text style={{ paddingBottom: 40 }}>
-            <Text>you are</Text>
-            <Text style={{ fontWeight: "bold" }}> red-lobster9</Text>
+            <Text>you are </Text>
+            <Text style={{ fontWeight: "bold" }}>
+              {this.state.user.userName}
+            </Text>
           </Text>
           <Text
             onPress={() => this.props.navigation.navigate("Game")}

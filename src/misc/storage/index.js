@@ -6,10 +6,12 @@ export default class Storage {
   };
 
   static async save(key: string, value: string): Promise {
-    return SInfo.setItem(key, value, {});
+    return SInfo.setItem(key, JSON.stringify({ value }), {});
   }
 
   static async get(key: string): Promise {
-    return SInfo.getItem(key, {});
+    return SInfo.getItem(key, {}).then(result => {
+      return JSON.parse(result).value;
+    });
   }
 }

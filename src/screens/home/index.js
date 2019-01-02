@@ -3,6 +3,7 @@ import Styles from "./style";
 import { View, Text, Button, ActivityIndicator } from "react-native";
 import DeviceInfo from "react-native-device-info";
 import API from "../../api";
+import Storage from "../../misc/storage";
 
 export default class HomeScreen extends React.Component {
   static navigationOptions = {
@@ -11,11 +12,26 @@ export default class HomeScreen extends React.Component {
 
   state = {
     isLoading: true,
-    deviceId: ""
+    user: null
   };
 
   componentDidMount() {
-    this.getDeviceID();
+    Storage.get(Storage.Keys.User)
+      .then(user => {
+        if (user) {
+          this.setState({
+            user,
+            isLoading: false
+          });
+        } else {
+          this.getDeviceID();
+        }
+      })
+      .catch(error => {
+        console.log("===== Error Getting User =======");
+        console.log(error);
+        this.retryRegisterUser();
+      });
   }
 
   /**
@@ -25,12 +41,14 @@ export default class HomeScreen extends React.Component {
    */
   getDeviceID = () => {
     const deviceId = DeviceInfo.getUniqueID();
-    this.setState(
-      {
-        deviceId
-      },
-      () => this.registerUser()
-    );
+    this.registerUser(deviceId);
+  };
+
+  retryRegisterUser = () => {
+    this.setState({
+      isLoading: true
+    });
+    this.getDeviceID();
   };
 
   /**
@@ -38,14 +56,17 @@ export default class HomeScreen extends React.Component {
    *
    * Registers user on the server and returns user info
    */
-  registerUser = () => {
-    //TODO: Update this with the real registration user Endpoint
+  registerUser = uuid => {
     API.shared
-      .registerUser(this.state.deviceId)
-      .then(response => {
-        console.log(response);
+      .registerUser(uuid)
+      .then(user => {
+        Storage.save(Storage.Keys.User, user);
+        this.setState({
+          user
+        });
       })
       .catch(error => {
+        console.log("===== Error =======");
         console.log(error);
       })
       .finally(() => {
@@ -53,6 +74,18 @@ export default class HomeScreen extends React.Component {
           isLoading: false
         });
       });
+  };
+
+  // Better used handling
+  getUserName = () => {
+    if (this.state.user) {
+      const user = this.state.user;
+      const suffix = user.number > 0 ? user.number : "";
+      const username = user.color + "-" + user.animal + suffix;
+      return username;
+    }
+
+    return "== Error ==";
   };
 
   render() {
@@ -64,12 +97,12 @@ export default class HomeScreen extends React.Component {
           <Text>Creating User...</Text>
         </View>
       );
-    } else {
+    } else if (this.state.user) {
       content = (
         <View>
           <Text style={{ paddingBottom: 40 }}>
-            <Text>you are</Text>
-            <Text style={{ fontWeight: "bold" }}> red-lobster9</Text>
+            <Text>you are </Text>
+            <Text style={{ fontWeight: "bold" }}>{this.getUserName()}</Text>
           </Text>
           <Text
             onPress={() => this.props.navigation.navigate("Game")}
@@ -89,6 +122,15 @@ export default class HomeScreen extends React.Component {
           >
             solo practice
           </Text>
+        </View>
+      );
+    } else {
+      content = (
+        <View>
+          <Text style={{ paddingBottom: 20 }}>
+            We had an error creating your user
+          </Text>
+          <Button onPress={() => this.retryRegisterUser()} title="try again" />
         </View>
       );
     }

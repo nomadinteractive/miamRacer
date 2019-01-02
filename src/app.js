@@ -16,7 +16,7 @@ const AppNavigator = createStackNavigator(
     }
   },
   {
-    initialRouteName: "Game"
+    initialRouteName: "Home"
   }
 );
 const AppContainer = createAppContainer(AppNavigator);

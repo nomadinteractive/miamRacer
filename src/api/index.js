@@ -5,11 +5,13 @@ export default class API {
 
   registerUser(uuid: string) {
     console.log(uuid);
+    var manager = axios.create({
+      baseURL: "http://0ef925b1.ngrok.io/api/"
+    });
 
-    return axios
-      .get("https://jsonplaceholder.typicode.com/todos/1")
-      .then(response => {
-        return response.data;
-      });
+    manager.defaults.headers.common["token"] = uuid;
+    return manager.post("/register").then(response => {
+      return response.data;
+    });
   }
 }

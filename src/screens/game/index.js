@@ -18,7 +18,8 @@ export default class GameScreen extends React.Component {
       timerTextColor: '#dadada',
       secondsRemainingForGameToStart: 3,
       secondsRemainingForUserToRespond: 10,
-      showStartTimer: true
+      showStartTimer: true,
+      isLoading: false
     };
   }
   
@@ -39,13 +40,14 @@ export default class GameScreen extends React.Component {
   /**
    * tick
    *
+   * ticks before each game question starts
    */
   tickForStart = () => {
     this.setState({secondsRemainingForGameToStart: this.state.secondsRemainingForGameToStart - 1});
     if (this.state.secondsRemainingForGameToStart <= 0) {
       clearInterval(this.interval);
       this.setState({
-        secondsRemainingForUserToRespond: 10
+        secondsRemainingForUserToRespond: 1
       }, () => this.interval = setInterval(this.tickForRespond, 1000))
     }
   }
@@ -53,14 +55,20 @@ export default class GameScreen extends React.Component {
   /**
    * tick
    *
+   * ticks before each game session starts and calls for the next game question
    */
   tickForRespond = () => {
     this.setState({secondsRemainingForUserToRespond: this.state.secondsRemainingForUserToRespond - 1});
     if (this.state.secondsRemainingForUserToRespond <= 0) {
       clearInterval(this.interval);
-      this.setState({
-        secondsRemainingForGameToStart: 3
-      }, () => this.interval = setInterval(this.tickForStart, 1000))
+      
+      // Make a call to the server to submit the user's answer
+      // this.setState({ isLoading: true })
+      
+      
+      // this.setState({
+      //   secondsRemainingForGameToStart: 3
+      // }, () => this.interval = setInterval(this.tickForStart, 1000))
     }
   }
   
@@ -69,7 +77,18 @@ export default class GameScreen extends React.Component {
   };
 
   render() {
-    console.log(this.state)
+    if(this.state.isLoading) {
+      return (
+        <View style={{ height: '100%',  alignItems: "center", justifyContent: 'center'}}>
+    
+          <View>
+            <Text style={[{ color: this.state.timerTextColor}, Styles.timerText]}>Good things happen when we wait...</Text>
+          </View>
+  
+        </View>
+      )
+    }
+    
     if(this.state.showStartTimer && this.state.secondsRemainingForGameToStart !== 0) {
       return (
         <View style={{ height: '100%',  alignItems: "center", justifyContent: 'center'}}>
@@ -81,6 +100,7 @@ export default class GameScreen extends React.Component {
         </View>
       )
     }
+    
     return (
       <SafeAreaView style={{flex: 1, backgroundColor: '#fff'}}>
         <View>

@@ -1,33 +1,26 @@
-import { StyleSheet, Platform, Dimensions } from "react-native";
-
-let { height, width } = Dimensions.get('window');
+import { StyleSheet, Platform } from "react-native";
 
 export default StyleSheet.create({
   mainContainer: {
-    // flex: 1,
-    marginTop: Platform.OS === 'ios' ? 150 : 70,
     alignItems: "center",
-    // justifyContent: "center"
+    height: '60%'
   },
   textStyle: {
-    fontSize: 100
+    fontSize: 100,
+    marginTop: Platform.OS === 'ios' ? 100 : 70,
   },
   questionText: {
     fontSize: 15
   },
   timerText: {
     fontSize: 70,
-    // marginBottom: Platform.OS === 'ios' ? height / 7 :  height / 15
   },
   answerHolder: {
-    // backgroundColor: 'red',
-    marginTop: Platform.OS === 'ios' ? height / 7 :  height / 5.5,
-    height: '100%'
+    height: '40%',
+    marginTop: Platform.OS === 'ios' ? 5 :  5,
   },
   answerField: {
-    // backgroundColor: 'red',
     flexDirection: 'row',
-    // height: '6%'
-    height: height / 10
+    height: '33%'
   }
 });

@@ -4,7 +4,6 @@ import { View, Text, Button, SafeAreaView } from "react-native";
 import OptionHolder from '../../components/options'
 
 export default class GameScreen extends React.Component {
-  
   /**
    * constructor
    */
@@ -17,11 +16,12 @@ export default class GameScreen extends React.Component {
       questionTextColor: '#6c6c6c',
       timerText: '6.4',
       timerTextColor: '#dadada',
-      secondsRemaining: 10
+      secondsRemainingForUserToRespond: 10
     };
   }
   
   componentDidMount() {
+    this.setState({ secondsRemainingForUserToRespond: 10 })
     this.interval = setInterval(this.tick, 1000);
   }
   
@@ -30,8 +30,8 @@ export default class GameScreen extends React.Component {
   }
   
   tick = () => {
-    this.setState({secondsRemaining: this.state.secondsRemaining - 1});
-    if (this.state.secondsRemaining <= 0) {
+    this.setState({secondsRemainingForUserToRespond: this.state.secondsRemainingForUserToRespond - 1});
+    if (this.state.secondsRemainingForUserToRespond <= 0) {
       clearInterval(this.interval);
     }
   }
@@ -43,20 +43,22 @@ export default class GameScreen extends React.Component {
   render() {
     console.log(this.state)
     return (
-      <View>
-        <View style={Styles.mainContainer}>
-          <View>
-            <Text style={[{ color: this.state.textColor}, Styles.textStyle]}>{this.state.text}</Text>
+      <SafeAreaView style={{flex: 1, backgroundColor: '#fff'}}>
+        <View>
+          <View style={Styles.mainContainer}>
+            <View>
+              <Text style={[{ color: this.state.textColor}, Styles.textStyle]}>{this.state.text}</Text>
+            </View>
+      
+            <View>
+              <Text style={[{ color: this.state.questionTextColor}, Styles.questionText]}>{this.state.questionText}</Text>
+            </View>
+      
+            <View>
+              <Text style={[{ color: this.state.timerTextColor}, Styles.timerText]}>{this.state.secondsRemainingForUserToRespond}</Text>
+            </View>
           </View>
     
-          <View>
-            <Text style={[{ color: this.state.questionTextColor}, Styles.questionText]}>{this.state.questionText}</Text>
-          </View>
-    
-          <View>
-            <Text style={[{ color: this.state.timerTextColor}, Styles.timerText]}>{this.state.secondsRemaining}</Text>
-          </View>
-        </View>
           <View style={Styles.answerHolder}>
             <View style={Styles.answerField}>
               <OptionHolder backgroundColor={'#ff0000'}/>
@@ -77,7 +79,8 @@ export default class GameScreen extends React.Component {
               <OptionHolder backgroundColor={'#000'}/>
             </View>
           </View>
-      </View>
+        </View>
+      </SafeAreaView>
     );
   }
 }

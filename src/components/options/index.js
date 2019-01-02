@@ -1,6 +1,6 @@
 import React from "react";
 import Styles from "./style";
-import { View, Text, Button, TouchableOpacity} from "react-native";
+import { View, TouchableOpacity} from "react-native";
 
 export default class OptionHolder extends React.Component {
   state={

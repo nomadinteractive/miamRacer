@@ -16,16 +16,22 @@ export default class HomeScreen extends React.Component {
   };
 
   componentDidMount() {
-    Storage.get(Storage.Keys.User).then(user => {
-      if (user) {
-        this.setState({
-          user,
-          isLoading: false
-        });
-      } else {
-        this.getDeviceID();
-      }
-    });
+    Storage.get(Storage.Keys.User)
+      .then(user => {
+        if (user) {
+          this.setState({
+            user,
+            isLoading: false
+          });
+        } else {
+          this.getDeviceID();
+        }
+      })
+      .catch(error => {
+        console.log("===== Error Getting User =======");
+        console.log(error);
+        this.retryRegisterUser();
+      });
   }
 
   /**

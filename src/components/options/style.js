@@ -16,18 +16,12 @@ export default StyleSheet.create({
     fontSize: 15
   },
   timerText: {
-    fontSize: 70,
-    // marginBottom: Platform.OS === 'ios' ? height / 7 :  height / 15
-  },
-  answerHolder: {
-    // backgroundColor: 'red',
-    marginTop: Platform.OS === 'ios' ? height / 7 :  height / 5.5,
-    height: '100%'
+    fontSize: 70
   },
   answerField: {
-    // backgroundColor: 'red',
-    flexDirection: 'row',
-    // height: '6%'
-    height: height / 10
-  }
+    // backgroundColor: 'blue',
+    width: width / 4,
+    height: '100%'
+    // marginTop: height / 10
+  },
 });
